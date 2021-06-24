@@ -2,6 +2,7 @@
 >Execute:
 
     composer install
+    php artisan key:generate
 
 >DB:
 

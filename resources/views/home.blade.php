@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="head-side-right">
-                    <a href="/perfil" class="user-area">
+                    <a href="" class="user-area">
                         <div class="user-area-text">{{ $loggedUser->name }}</div>
                         <div class="user-area-icon">
                             <img src="media/avatars/{{ $loggedUser->avatar }}" />
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="/perfil">
+                <a href="">
                     <div class="menu-item">
                         <div class="menu-item-icon">
                             <img src="images/user.png" width="16" height="16" />
@@ -120,10 +120,10 @@
                         <div class="box-body">
                             <div class="feed-item-head row mt-20 m-width-20">
                                 <div class="feed-item-head-photo">
-                                    <a href="/perfil/{{ $feedItem->user->id }}"><img src="media/avatars/{{ $feedItem->user->avatar }}" /></a>
+                                    <a href=""><img src="media/avatars/{{ $feedItem->user->avatar }}" /></a>
                                 </div>
                                 <div class="feed-item-head-info">
-                                    <a href="/perfil/{{ $feedItem->user->id }}"><span class="fidi-name">{{ $feedItem->user->name }}</span></a>
+                                    <a href=""><span class="fidi-name">{{ $feedItem->user->name }}</span></a>
                                     <span class="fidi-action"><?php
                                     switch($feedItem->type) {
                                         case 'text':
@@ -168,10 +168,10 @@
                                     @foreach($feedItem->comments as $item)
                                     <div class="fic-item row m-height-10 m-width-20">
                                         <div class="fic-item-photo">
-                                            <a href="/perfil/{{ $item['user']['id'] }}"><img src="media/avatars/{{ $item['user']['avatar'] }}" /></a>
+                                            <a href=""><img src="media/avatars/{{ $item['user']['avatar'] }}" /></a>
                                         </div>
                                         <div class="fic-item-info">
-                                            <a href="/perfil/{{ $item['user']['id'] }}">{{ $item['user']['name'] }}</a>
+                                            <a href="">{{ $item['user']['name'] }}</a>
                                             {{ $item['body'] }}
                                         </div>
                                     </div>
@@ -180,7 +180,7 @@
 
                                 <div class="fic-answer row m-height-10 m-width-20">
                                     <div class="fic-item-photo">
-                                        <a href="/perfil/{{ $feedItem->user->id }}"><img src="media/avatars/{{ $loggedUser->avatar }}" /></a>
+                                        <a href=""><img src="media/avatars/{{ $loggedUser->avatar }}" /></a>
                                     </div>
                                     <input type="text" class="fic-item-field" placeholder="Escreva um comentário" />
                                 </div>

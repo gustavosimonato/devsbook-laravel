@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="head-side-right">
-                    <a href="/perfil" class="user-area">
+                    <a href="" class="user-area">
                         <div class="user-area-text">{{ $user->name }}</div>
                         <div class="user-area-icon">
                             <img src="media/avatars/{{ $user->avatar }}" />
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="/perfil">
+                <a href="">
                     <div class="menu-item">
                         <div class="menu-item-icon">
                             <img src="images/user.png" width="16" height="16" />
