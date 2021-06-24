@@ -3,10 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Post;
-use App\PostComment;
-use App\User;
-use App\UserRelation;
-use App\PostLike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,48 +13,27 @@ class PostController extends Controller
         $this->middleware('auth');
     }
 
-    public function new() {
-
+    public function new(Request $request)
+    {
         $loggedUser = Auth::user();
 
-        
-        $body = filter_input(INPUT_POST, 'body');
-
-        if($body) {
-            PostHandler::addPost(
-                $this->loggedUser->id,
-                'text',
-                $body
-            );
-        }
+        $body = $request->input('body');
 
         $t = new Post;
-        $t->id_user = '';
-        $t->id_user = '';
-        $t->body = '';
+        $t->id_user = $loggedUser->id;
+        $t->type = 'text';
+        $t->body = $body;
         $t->save();
 
-
-        Post::insert([
-            'id_user' => $idUser,
-            'type' => $type,
-            'body' => $body
-        ])->execute();
-
-
-        $this->redirect('/');
+        return redirect()->route('index');
     }
 
-    public function delete($atts = []) {
-        if(!empty($atts['id'])) {
-            $idPost = $atts['id'];
-
-            PostHandler::delete(
-                $idPost,
-                $this->loggedUser->id
-            );
+    public function delete($id)
+    {
+        if (!empty($id)) {
+            Post::where('id', $id)->delete();
         }
 
-        $this->redirect('/');
+        return redirect()->route('index');
     }
 }

@@ -32,12 +32,9 @@ Route::get('/perfil/{id}/follow', 'ProfileController@follow');
 Route::get('/perfil/{id}', 'ProfileController@index');
 Route::get('/perfil', 'ProfileController@index');
 
-Route::get('/amigos', 'ProfileController@friends');
-Route::get('/fotos', 'ProfileController@photos');
-
 Route::get('/pesquisa', 'SearchController@index');
 
-Route::get('/config', 'ConfigController@index');
+Route::get('/config', 'ConfigController@index')->name('config');
 Route::post('/config', 'ConfigController@save');
 
 Route::get('/ajax/like/{id}', 'AjaxController@like');

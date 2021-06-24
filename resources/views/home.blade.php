@@ -61,26 +61,6 @@
                         </div>
                     </div>
                 </a>
-                <a href="/amigos">
-                    <div class="menu-item">
-                        <div class="menu-item-icon">
-                            <img src="images/friends.png" width="16" height="16" />
-                        </div>
-                        <div class="menu-item-text">
-                            Amigos
-                        </div>
-                    </div>
-                </a>
-                <a href="/fotos">
-                    <div class="menu-item">
-                        <div class="menu-item-icon">
-                            <img src="images/photo.png" width="16" height="16" />
-                        </div>
-                        <div class="menu-item-text">
-                            Fotos
-                        </div>
-                    </div>
-                </a>
                 <div class="menu-splitter"></div>
                 <a href="/config">
                     <div class="menu-item">
@@ -135,7 +115,7 @@
                         </div>
                     </div>
 
-                    <?php foreach($feed['posts'] as $feedItem): ?>
+                    @foreach($feed['posts'] as $feedItem)
                     <div class="box feed-item" data-id="{{ $feedItem->id }}">
                         <div class="box-body">
                             <div class="feed-item-head row mt-20 m-width-20">
@@ -157,14 +137,14 @@
                                     <br />
                                     <span class="fidi-date">{{ date('d/m/Y', strtotime($feedItem->created_at)) }}</span>
                                 </div>
-                                <?php if($feedItem->mine): ?>
+                                @if($feedItem->mine)
                                 <div class="feed-item-head-btn">
                                     <img src="images/more.png" />
                                     <div class="feed-item-more-window">
                                         <a href="/post/{{ $feedItem->id }}/delete">Excluir Post</a>
                                     </div>
                                 </div>
-                                <?php endif; ?>
+                                @endif
                             </div>
                             <div class="feed-item-body mt-10 m-width-20">
                                 <?php
@@ -185,7 +165,7 @@
                             <div class="feed-item-comments">
 
                                 <div class="feed-item-comments-area">
-                                    <?php foreach($feedItem->comments as $item): ?>
+                                    @foreach($feedItem->comments as $item)
                                     <div class="fic-item row m-height-10 m-width-20">
                                         <div class="fic-item-photo">
                                             <a href="/perfil/{{ $item['user']['id'] }}"><img src="media/avatars/{{ $item['user']['avatar'] }}" /></a>
@@ -195,7 +175,7 @@
                                             {{ $item['body'] }}
                                         </div>
                                     </div>
-                                    <?php endforeach; ?>
+                                    @endforeach
                                 </div>
 
                                 <div class="fic-answer row m-height-10 m-width-20">
@@ -208,9 +188,7 @@
                             </div>
                         </div>
                     </div>
-                    <?php 
-                        endforeach;
-                    ?>
+                    @endforeach
 
                 </div>
                 <div class="column side pl-5">
@@ -249,6 +227,8 @@
 <script type="text/javascript" src="js/script.js"></script>
 <script type="text/javascript" src="js/vanillaModal.js"></script>
 <script type="text/javascript">
+    var token = '{{ csrf_token() }}';
+
     let feedInput = document.querySelector('.feed-new-input');
         let feedSubmit = document.querySelector('.feed-new-send');
         let feedForm = document.querySelector('.feed-new-form');
@@ -263,6 +243,7 @@
         
             let formData = new FormData();
             formData.append('photo', photo);
+            formData.append('_token', token);
         
             let req = await fetch('/ajax/upload', {
                 method: 'POST',
@@ -270,11 +251,7 @@
             });
             let json = await req.json();
         
-            if(json.error != '') {
-                alert(json.error);
-            }
-        
-            window.location.href = window.location.href;
+            location.reload(true)
         });
         
         feedSubmit.addEventListener('click', function(obj){
@@ -293,7 +270,6 @@ if (document.querySelector('.fic-item-field')) {
             if (e.keyCode == 13) {
                 let id = item.closest('.feed-item').getAttribute('data-id');
                 let txt = item.value;
-                let token = '{{ csrf_token() }}';
                 item.value = '';
 
                 let data = new FormData();
@@ -307,9 +283,7 @@ if (document.querySelector('.fic-item-field')) {
                 });
                 let json = await req.json();
 
-                if (json.error == '') {
-                    window.location.reload();
-                }
+                window.location.reload();
 
             }
         });

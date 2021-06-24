@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use App\PostComment;
 use App\PostLike;
 use Illuminate\Http\Request;
@@ -24,8 +25,8 @@ class AjaxController extends Controller
 
         if (count($myLike) > 0) {
             $del_like = PostLike::where('id_post', $id)
-                ->where('id_user', $loggedUser->id)->get();
-            $del_like->delete();
+                ->where('id_user', $loggedUser->id)
+                ->delete();
         } else {
             $add_like = new PostLike;
             $add_like->id_post = $id;
@@ -57,70 +58,30 @@ class AjaxController extends Controller
         exit;
     }
 
-    public function upload()
+    public function upload(Request $request)
     {
-        /* $array = ['error' => ''];
+        $array = ['error' => ''];
 
-        if (isset($_FILES['photo']) && !empty($_FILES['photo']['tmp_name'])) {
-            $photo = $_FILES['photo'];
+        $loggedUser = Auth::user();
 
-            $maxWidth = 800;
-            $maxHeight = 800;
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,jpg,png'
+        ]);
 
-            if (in_array($photo['type'], ['image/png', 'image/jpg', 'image/jpeg'])) {
+        $ext = $request->photo->extension();
 
-                list($widthOrig, $heightOrig) = getimagesize($photo['tmp_name']);
-                $ratio = $widthOrig / $heightOrig;
+        $imageName = md5(time() . rand(0, 9999)) . '.' . $ext;
 
-                $newWidth = $maxWidth;
-                $newHeight = $maxHeight;
-                $ratioMax = $maxWidth / $maxHeight;
+        $request->photo->move(public_path('media/uploads'), $imageName);
 
-                if ($ratioMax > $ratio) {
-                    $newWidth = $newHeight * $ratio;
-                } else {
-                    $newHeight = $newWidth / $ratio;
-                }
-
-                $finalImage = imagecreatetruecolor($newWidth, $newHeight);
-                switch ($photo['type']) {
-                    case 'image/png':
-                        $image = imagecreatefrompng($photo['tmp_name']);
-                        break;
-                    case 'image/jpg':
-                    case 'image/jpeg':
-                        $image = imagecreatefromjpeg($photo['tmp_name']);
-                        break;
-                }
-
-                imagecopyresampled(
-                    $finalImage,
-                    $image,
-                    0,
-                    0,
-                    0,
-                    0,
-                    $newWidth,
-                    $newHeight,
-                    $widthOrig,
-                    $heightOrig
-                );
-
-                $photoName = md5(time() . rand(0, 9999)) . '.jpg';
-                imagejpeg($finalImage, 'media/uploads/' . $photoName);
-
-                PostHandler::addPost(
-                    $this->loggedUser->id,
-                    'photo',
-                    $photoName
-                );
-            }
-        } else {
-            $array['error'] = 'Nenhuma imagem enviada';
-        }
+        $post = new Post;
+        $post->id_user = $loggedUser->id;
+        $post->type = 'photo';
+        $post->body = $imageName;
+        $post->save();
 
         header("Content-Type: application/json");
         echo json_encode($array);
-        exit; */
+        exit;
     }
 }
